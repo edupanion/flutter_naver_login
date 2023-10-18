@@ -293,12 +293,16 @@ class FlutterNaverLoginPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
       override fun onFailure(httpStatus: Int, message: String) {
         val errorCode = NaverIdLoginSDK.getLastErrorCode().code
         val errorDesc = NaverIdLoginSDK.getLastErrorDescription()
-        result.success(object : HashMap<String, String>() {
-          init {
-            put("status", "error")
-            put("errorMessage", "errorCode:$errorCode, errorDesc:$errorDesc")
-          }
-        })
+        try {
+          result.success(object : HashMap<String, String>() {
+            init {
+              put("status", "error")
+              put("errorMessage", "errorCode:$errorCode, errorDesc:$errorDesc")
+            }
+          })
+        } catch (e: Exception) {
+          e.printStackTrace()
+        }
       }
       override fun onError(errorCode: Int, message: String) {
         onFailure(errorCode, message)
